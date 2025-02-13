@@ -81,8 +81,9 @@ Update and Install Feeds (if you created a custom feed):
 ```
 
 Configure OpenWrt:
-Bash
+```Bash
 make menuconfig
+```
 Select your target system, any necessary kernel modules, and your telematics-gateway package under the appropriate category (e.g., "Telematics").
 Build the Image:
 ```Bash
