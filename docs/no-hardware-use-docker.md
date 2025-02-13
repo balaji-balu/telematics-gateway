@@ -3,43 +3,43 @@ Yes, using Docker for testing your MQTT-based telematics system, especially when
 Here's how you can leverage Docker for testing:
 1. Setting up the MQTT Broker in Docker:
 Official Mosquitto Image: The easiest way is to use the official Mosquitto Docker image.
-Bash
+```Bash
 docker run -p 1883:1883 -p 9001:9001 eclipse-mosquitto:latest
-
+```
 This command will:
 Download the eclipse-mosquitto image (if you don't have it already).
 Run a container named mosquitto.
 Map port 1883 (MQTT) and 9001 (WebSockets, for MQTT over WebSockets if you need it) from the container to your host machine.
 Custom Configuration (Optional): If you need custom configuration for your broker (e.g., authentication, persistence), you can create a mosquitto.conf file and mount it into the container:
-Bash
+```Bash
 docker run -v ./mosquitto.conf:/etc/mosquitto/mosquitto.conf -p 1883:1883 -p 9001:9001 eclipse-mosquitto:latest
-
+```
 2. Simulating Nodes in Docker:
 You can simulate your telematics nodes using Docker containers as well.
 Node Application in Docker: You'll need to create a Docker image for your node application. Here's a basic example Dockerfile (assuming your node application is written in C and compiled to an executable called telematics_node):
-Dockerfile
+```Dockerfile
 FROM alpine:latest  # Use a minimal base image
 
 COPY telematics_node /usr/local/bin/
 # Copy any required libraries or configuration files
 
 CMD ["/usr/local/bin/telematics_node"] # Command to run when the container starts
-
+```
 Building the Node Image:
-Bash
+```Bash
 docker build -t telematics-node-image .  # Build the image in the current directory
-
+```
 Running the Node Container:
-Bash
+```Bash
 docker run --net="host" telematics-node-image  # Run the container
-
+```
 The --net="host" option is very convenient as it allows the container to use the host's network interface directly, so it can connect to the broker running on your host machine.
 Multiple Nodes: You can run multiple node containers to simulate a network of nodes:
-Bash
+```Bash
 docker run --net="host" telematics-node-image &  # Run node 1 in the background
 docker run --net="host" telematics-node-image &  # Run node 2 in the background
 # ... and so on
-
+```
 3. Simulating the Gateway in Docker:
 Similarly, you can create a Docker image for your gateway application.
 Gateway Application in Docker: Create a Dockerfile for your gateway application, similar to the node application.
