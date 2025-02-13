@@ -27,7 +27,7 @@ openwrt/
         files/  <-- Configuration files, scripts, etc.
 
 **Makefile**: This is the heart of your package. Here's a basic example:
-Makefile
+```Makefile
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=telematics-gateway
@@ -64,10 +64,13 @@ define Package/telematics-gateway/install
 endef
 
 $(eval $(call BuildPackage,telematics-gateway))
+```
 
-Source Code (src/): Place your C/C++ code here. Remember to use the cross-compilation tools provided by the OpenWrt SDK.
-Configuration Files (files/): Put any configuration files (e.g., UCI configuration files) here. They will be installed to the appropriate locations on the target device.
-3. Building the Package and OpenWrt Image:
+**Source Code (src/)**: Place your C/C++ code here. Remember to use the cross-compilation tools provided by the OpenWrt SDK.
+
+**Configuration Files** (files/): Put any configuration files (e.g., UCI configuration files) here. They will be installed to the appropriate locations on the target device.
+
+### 3. Building the Package and OpenWrt Image:
 Update and Install Feeds (if you created a custom feed):
 Bash
 ./scripts/feeds update -a
@@ -83,13 +86,14 @@ Bash
 make -j$(nproc)
 
 
-4. Deploying to the Target Device:
+### 4. Deploying to the Target Device:
 Flashing the Image: The output of the build process will be an image file (e.g., .img, .bin). You'll need to flash this image onto your target device. The exact method depends on your device (e.g., using mtd, TFTP, or a web interface). Consult your device's documentation.
 Installing the Package (Alternative): If you don't want to rebuild the entire image, you can build just the package:
 Bash
 make package/telematics-gateway/compile
 This will create an .ipk file in bin/packages. You can then copy this file to your target device and install it using opkg install telematics-gateway_*.ipk.
-5. Testing and Debugging:
+
+### 5. Testing and Debugging:
 SSH: Use SSH to connect to your OpenWrt device.
 Logs: Check system logs (logread) and your application's logs for any errors.
 Debugging Tools: If necessary, you can use tools like gdb for remote debugging, but this requires more setup.
