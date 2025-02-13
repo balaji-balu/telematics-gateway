@@ -100,18 +100,19 @@ This will create an .ipk file in bin/packages. You can then copy this file to yo
 
 ### 5. Testing and Debugging:
 
-SSH: Use SSH to connect to your OpenWrt device.
+*SSH*: Use SSH to connect to your OpenWrt device.
 
-Logs: Check system logs (logread) and your application's logs for any errors.
+*Logs*: Check system logs (logread) and your application's logs for any errors.
 
-Debugging Tools: If necessary, you can use tools like gdb for remote debugging, but this requires more setup.
+*Debugging Tools*: If necessary, you can use tools like gdb for remote debugging, but this requires more setup.
 Key Considerations:
 
-Hardware Interfaces: Ensure your code correctly interfaces with your telematics hardware. This might involve device drivers or libraries.
+*Hardware Interfaces*: Ensure your code correctly interfaces with your telematics hardware. This might involve device drivers or libraries.
 
-Real-time Requirements: If your application has real-time requirements, consider using appropriate techniques (e.g., real-time kernel patches, careful scheduling).
+*Real-time Requirements*: If your application has real-time requirements, consider using appropriate techniques (e.g., real-time kernel patches, careful scheduling).
 
-Security: Implement appropriate security measures (e.g., secure communication protocols, authentication).
+*Security*: Implement appropriate security measures (e.g., secure communication protocols, authentication).
 
-Memory Management: Embedded systems often have limited resources. Be mindful of memory usage and avoid memory leaks.
+*Memory Management*: Embedded systems often have limited resources. Be mindful of memory usage and avoid memory leaks.
+
 This detailed breakdown should give you a good starting point. Remember to consult the OpenWrt documentation and adapt the instructions to your specific hardware and software requirements. Let me know if you have more specific questions as you work through the process!
