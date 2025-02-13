@@ -1,5 +1,5 @@
 docker compose is used to bundle mosquitto broker, gateway and nodes
-docomentation available in docs folder
+documentation available in docs folder
 
 go to the root directory
 
