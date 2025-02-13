@@ -112,12 +112,13 @@ Security: Implement appropriate security measures (e.g., secure communication pr
 
 Memory Management: Embedded systems often have limited resources. Be mindful of memory usage and avoid memory leaks.
 This detailed breakdown should give you a good starting point. Remember to consult the OpenWrt documentation and adapt the instructions to your specific hardware and software requirements. Let me know if you have more specific questions as you work through the process!
+
 i want to use mosquito. what is lib to add to telematics. how to test mosquito client
 You're on the right track wanting to use Mosquitto; it's a solid choice for MQTT communication in embedded systems. Here's how to integrate it and test your client:
 1. Adding the Mosquitto Library to Your Telematics Gateway:
 Dependencies in Makefile: In your telematics-gateway/Makefile, you already have +libmosquitto in the DEPENDS line. This is correct. It tells the OpenWrt build system that your package depends on the Mosquitto library.
 Including Headers in Your Code: In your C/C++ source code (telematics_gateway.c or similar), you need to include the Mosquitto header file:
-C
+```C
 #include <mosquitto.h>
 
 Linking the Library: The OpenWrt build system should handle linking the library automatically because of the DEPENDS entry in the Makefile. However, double-check that the linker flags in your Makefile's Build/Compile section (or similar) are correct. They should implicitly include -lmosquitto.
@@ -169,6 +170,7 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+```
 
 3. Testing Your Mosquitto Client:
 MQTT Broker: You'll need an MQTT broker running. You can set up your own (e.g., Mosquitto, EMQX) or use a cloud-based MQTT service (e.g., CloudMQTT, HiveMQ Cloud). The example code above assumes you have a broker at your_mqtt_broker_address.
