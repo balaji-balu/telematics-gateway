@@ -96,7 +96,7 @@ Installing the Package (Alternative): If you don't want to rebuild the entire im
 ```Bash
 make package/telematics-gateway/compile
 ```
-This will create an .ipk file in bin/packages. You can then copy this file to your target device and install it using opkg install telematics-gateway_*.ipk.
+This will create an .ipk file in bin/packages. You can then copy this file to your target device and install it using `opkg install telematics-gateway_*.ipk`.
 
 ### 5. Testing and Debugging:
 
