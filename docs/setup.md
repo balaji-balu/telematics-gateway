@@ -18,6 +18,7 @@ Communication: Code to send the processed data to a server (e.g., using MQTT, HT
 The recommended way to integrate your telematics software into OpenWrt is by creating a package. This makes installation and management much easier.
 
 **Package Directory**: Create a directory in the package or feeds directory of your OpenWrt build system. Let's say your package is called telematics-gateway. The structure would look like this:
+```
 openwrt/
   feeds/
     telematics/  <-- Your custom feed (recommended)
@@ -27,7 +28,7 @@ openwrt/
           telematics_gateway.c  <-- Your main application code
           ... other source files
         files/  <-- Configuration files, scripts, etc.
-
+```
 **Makefile**: This is the heart of your package. Here's a basic example:
 ```Makefile
 include $(TOPDIR)/rules.mk
