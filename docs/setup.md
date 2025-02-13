@@ -114,7 +114,7 @@ Memory Management: Embedded systems often have limited resources. Be mindful of 
 This detailed breakdown should give you a good starting point. Remember to consult the OpenWrt documentation and adapt the instructions to your specific hardware and software requirements. Let me know if you have more specific questions as you work through the process!
 
 
-mosquitto_loop() or mosquitto_loop_forever()
+## mosquitto_loop() or mosquitto_loop_forever()
 You're asking about the best way to handle the Mosquitto event loop in your telematics gateway application. Both mosquitto_loop() and mosquitto_loop_forever() serve the purpose of processing incoming and outgoing MQTT messages, but they have different characteristics:
 mosquitto_loop_forever():
 Blocking: This function blocks execution indefinitely. It will continuously run, processing network events and calling your callback functions (e.g., message received, connection status) until the connection is lost or an error occurs.
@@ -132,7 +132,7 @@ Publish data via MQTT.
 Potentially handle other network protocols or tasks.
 Using mosquitto_loop_forever() would prevent you from doing anything else while the MQTT connection is active.
 Example using mosquitto_loop() in a main loop:
-C
+```C
 #include <mosquitto.h>
 #include <stdio.h>
 #include <unistd.h> // for usleep()
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
+```
 Key Improvements in this example:
 Main Loop: The while (1) loop allows your application to perform other tasks besides handling MQTT.
 mosquitto_loop() with Timeout: The mosquitto_loop(mosq, 100) call processes Mosquitto events with a 100ms timeout. This means the loop won't get stuck waiting for MQTT messages if there aren't any. Adjust the timeout as needed.
@@ -182,7 +182,7 @@ Data Acquisition and Processing: The comments indicate where you would put your 
 usleep() (for demonstration only): The usleep() is just a placeholder for demonstration. In a real-world application, you would use timers, interrupts, or other event-driven mechanisms to trigger data acquisition and processing rather than busy-waiting.
 Using a separate thread (more advanced):
 If your other tasks are computationally intensive, you might want to handle Mosquitto in a separate thread. This is a more advanced approach but can be beneficial for performance:
-C
+```C
 #include <pthread.h>
 
 // ... (Mosquitto initialization and connection) ...
@@ -219,10 +219,12 @@ int main(int argc, char *argv[]) {
     pthread_join(thread_id, NULL); // Wait for the thread to finish (if needed)
     return 0;
 }
-
+```
 This example shows how to run mosquitto_loop() in a separate thread, allowing the main thread to handle other tasks. You would need to use appropriate synchronization mechanisms (e.g., mutexes, semaphores) to protect shared data between the threads.
 Choose the approach that best suits the complexity and real-time requirements of your telematics gateway. For most cases, the main loop approach with mosquitto_loop() is the most appropriate and easier to manage.
 why broker is required? draw the diagram with gateway, nodes, broker, mqtt
+
+### why broker is required
 You're right to question why an MQTT broker is necessary. It's a crucial component in the MQTT architecture and provides several key benefits. Let's break it down and then visualize it with a diagram.
 Why an MQTT Broker is Required:
 Decoupling Publishers and Subscribers: In a typical client-server model, clients communicate directly with a server. In MQTT, publishers (devices sending data, like your telematics gateway) and subscribers (devices or applications receiving data) don't communicate directly. They interact through the broker. This decoupling offers several advantages:
