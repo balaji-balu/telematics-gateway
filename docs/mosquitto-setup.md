@@ -70,14 +70,21 @@ Run your telematics gateway application on the OpenWrt device.
 Subscribe to the MQTT topic (telematics/data) using your MQTT client.
 Observe the messages published by your telematics gateway in your MQTT client.
 Example using mosquitto_sub:
-Bash
+```Bash
 mosquitto_sub -h your_mqtt_broker_address -p 1883 -t telematics/data -v
-
+```
 This command will subscribe to the telematics/data topic on the specified broker. The -v option shows the topic along with the message.
+
 4. Important Points:
-Error Handling: The example code includes basic error checking. In a production application, you should add more robust error handling.
-Looping: In a real-world telematics gateway, you'll likely want to have a loop that continuously acquires data, processes it, and publishes it to the MQTT broker. Mosquitto provides functions like mosquitto_loop() or mosquitto_loop_forever() for this.
-QoS: Consider the Quality of Service (QoS) level for your MQTT messages. QoS 0 (at most once) is the simplest, but QoS 1 (at least once) or QoS 2 (exactly once) might be necessary for reliable delivery.
-Authentication: If your MQTT broker requires authentication, you'll need to use mosquitto_username_pw_set() to set the username and password in your Mosquitto client.
-TLS/SSL: For secure communication, use TLS/SSL encryption with your MQTT connection. Mosquitto supports this.
-By following these steps, you should be able to integrate Mosquitto into your OpenWrt telematics gateway and test it effectively. Let me know if you have any more questions!
+
+*Error Handling*: The example code includes basic error checking. In a production application, you should add more robust error handling.
+
+*Looping*: In a real-world telematics gateway, you'll likely want to have a loop that continuously acquires data, processes it, and publishes it to the MQTT broker. Mosquitto provides functions like mosquitto_loop() or mosquitto_loop_forever() for this.
+
+*QoS*: Consider the Quality of Service (QoS) level for your MQTT messages. QoS 0 (at most once) is the simplest, but QoS 1 (at least once) or QoS 2 (exactly once) might be necessary for reliable delivery.
+
+*Authentication*: If your MQTT broker requires authentication, you'll need to use mosquitto_username_pw_set() to set the username and password in your Mosquitto client.
+
+*TLS/SSL*: For secure communication, use TLS/SSL encryption with your MQTT connection. Mosquitto supports this.
+
+By following these steps, you should be able to integrate Mosquitto into your OpenWrt telematics gateway and test it effectively. 
