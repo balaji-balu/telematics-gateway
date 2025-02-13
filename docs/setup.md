@@ -84,7 +84,7 @@ Configure OpenWrt:
 ```Bash
 make menuconfig
 ```
-Select your target system, any necessary kernel modules, and your telematics-gateway package under the appropriate category (e.g., "Telematics").
+Select your target system, any necessary kernel modules, and your `telematics-gateway` package under the appropriate category (e.g., "Telematics").
 Build the Image:
 ```Bash
 make -j$(nproc)
