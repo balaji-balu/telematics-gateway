@@ -59,10 +59,13 @@ int main(int argc, char *argv[]) {
 ```
 
 3. Testing Your Mosquitto Client:
-MQTT Broker: You'll need an MQTT broker running. You can set up your own (e.g., Mosquitto, EMQX) or use a cloud-based MQTT service (e.g., CloudMQTT, HiveMQ Cloud). The example code above assumes you have a broker at your_mqtt_broker_address.
-MQTT Client (for testing): Use an MQTT client application on your development machine (or even on the OpenWrt device itself) to subscribe to the same topic (telematics/data in the example) that your telematics gateway is publishing to. Some popular MQTT clients include:
+
+*MQTT Broker*: You'll need an MQTT broker running. You can set up your own (e.g., Mosquitto, EMQX) or use a cloud-based MQTT service (e.g., CloudMQTT, HiveMQ Cloud). The example code above assumes you have a broker at your_mqtt_broker_address.
+
+*MQTT Client (for testing)*: Use an MQTT client application on your development machine (or even on the OpenWrt device itself) to subscribe to the same topic (telematics/data in the example) that your telematics gateway is publishing to. Some popular MQTT clients include:
 mosquitto_sub (command-line): Comes with Mosquitto.
-MQTT Explorer (GUI): Excellent for visualizing MQTT data.  
+
+*MQTT Explorer (GUI)*: Excellent for visualizing MQTT data.  
 
 
 MQTT.fx (GUI): Another popular option.
