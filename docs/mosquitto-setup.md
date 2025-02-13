@@ -5,11 +5,12 @@ Dependencies in Makefile: In your telematics-gateway/Makefile, you already have 
 Including Headers in Your Code: In your C/C++ source code (telematics_gateway.c or similar), you need to include the Mosquitto header file:
 ```C
 #include <mosquitto.h>
-
+```
 Linking the Library: The OpenWrt build system should handle linking the library automatically because of the DEPENDS entry in the Makefile. However, double-check that the linker flags in your Makefile's Build/Compile section (or similar) are correct. They should implicitly include -lmosquitto.
+
 2. Basic Mosquitto Client Code Example:
 Here's a simplified example of how to use the Mosquitto library in your telematics gateway application:
-C
+```C
 #include <mosquitto.h>
 #include <stdio.h>
 #include <string.h>
