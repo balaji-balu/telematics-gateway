@@ -1,0 +1,34 @@
+# https://github.com/openwrt/docker/pkgs/container/rootfs/versions
+#   x86-64-openwrt-24.10
+# FROM openwrtorg/rootfs:x86-64
+# FROM ghcr.io/openwrt/rootfs:x86_64-openwrt-23.05
+
+# WORKDIR /app
+# COPY gateway.c .
+# RUN mkdir -p /var/lock && opkg update && opkg install gcc make
+# RUN gcc -o gateway gateway.c
+# CMD ["./gateway"]
+
+# Build stage
+FROM ghcr.io/openwrt/rootfs:x86-64 AS builder
+#FROM ghcr.io/openwrt/rootfs:x86_64-openwrt-23.05 AS builder
+# #FROM ghcr.io/openwrt/rootfs:x86-64-openwrt-24.10 AS builder
+WORKDIR /app
+COPY gateway.c .
+# Add libc-dev and other dependencies as needed
+RUN mkdir -p /var/lock
+RUN opkg update && opkg install gcc make libc-dev
+
+
+# Statically link the executable
+RUN gcc -static -o gateway gateway.c && if [ $? -ne 0 ]; then exit 1; fi
+
+# Final stage - a smaller image
+FROM ghcr.io/openwrt/rootfs:x86_64-openwrt-23.05
+WORKDIR /app
+COPY --from=builder /app/gateway .
+
+# Create necessary directories (if needed)
+RUN mkdir -p /var/lock
+
+CMD ["./gateway"]

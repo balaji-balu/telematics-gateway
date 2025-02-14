@@ -28,6 +28,8 @@ void process_discovery_message(const char *message) {
     json_t *root, *node_id, *sensors;
     json_error_t error;
 
+    printf("process_discovery_message start\n");
+
     root = json_loads(message, 0, &error);
     if (!root) {
         fprintf(stderr, "JSON parse error: %s\n", error.text);
@@ -37,28 +39,44 @@ void process_discovery_message(const char *message) {
     node_id = json_object_get(root, "node_id");
     sensors = json_object_get(root, "sensors");
 
-    if (!json_is_string(node_id) || !json_is_string(sensors)) {
+    if (!json_is_string(node_id) || !json_is_array(sensors)) {
         fprintf(stderr, "Invalid JSON format\n");
         json_decref(root);
         return;
     }
+
+    printf("1\n");
+
+    char sensor_list[50] = {0};
+    size_t sensor_count = json_array_size(sensors);
+    for (size_t i = 0; i < sensor_count; i++) {
+        json_t *sensor = json_array_get(sensors, i);
+        if (json_is_string(sensor)) {
+            strcat(sensor_list, json_string_value(sensor));
+            if (i < sensor_count - 1) strcat(sensor_list, ", ");
+        }
+    }
+
+    printf("2\n");
 
     // Check if the node is already in the list
     struct node_info *current = head;
     while (current != NULL) {
         if (strcmp(current->node_id, json_string_value(node_id)) == 0) {
             // Node already exists, update info if needed
-            strcpy(current->sensor_types, json_string_value(sensors)); // Update sensor types
+            // strcpy(current->sensor_types, json_string_value(sensors));
+            strcpy(current->sensor_types, sensor_list); // Update sensor types
             json_decref(root);
             return;
         }
         current = current->next;
     }
 
+    printf("3\n");
     // Node is new, add it to the list
     struct node_info *new_node = (struct node_info *)malloc(sizeof(struct node_info));
     strcpy(new_node->node_id, json_string_value(node_id));
-    strcpy(new_node->sensor_types, json_string_value(sensors));
+    strcpy(new_node->sensor_types, sensor_list);
     new_node->next = head;
     head = new_node;
 
@@ -66,22 +84,21 @@ void process_discovery_message(const char *message) {
 
     json_decref(root);
 
-
+    printf("process_discovery_message end\n");
 }
 
 // Function to handle incoming MQTT messages
 void on_message(struct mosquitto *client, void *userdata, const struct mosquitto_message *msg) {
-    fprintf(stdout, "on_message: start");
-    printf("on_message: start");
     if (strcmp(msg->topic, "discovery/nodes") == 0) {
         process_discovery_message(msg->payload);
+        //printf("Discovery from %s: %s\n", msg->topic, (char*)msg->payload);
     } else if (strncmp(msg->topic, "telemetry/", strlen("telemetry/")) == 0) {
         // Handle telemetry data from nodes
-        printf("Telemetry from %s: %p\n", msg->topic, msg->payload);
+        printf("Telemetry from %s: %s\n", msg->topic, (char*)msg->payload);
         // Process or store the telemetry data as needed
     } else if (strncmp(msg->topic, "status/", strlen("status/")) == 0) {
         // Handle status updates from nodes
-        printf("Status from %s: %p\n", msg->topic, msg->payload);
+        printf("Status from %s: %s\n", msg->topic, (char*)msg->payload);
     } // ... handle other message types (commands, config, etc.)
 }
 
@@ -89,6 +106,7 @@ void on_message(struct mosquitto *client, void *userdata, const struct mosquitto
 // Function to publish commands to a specific node
 void send_command(struct mosquitto *mosq, const char *node_id, const char *command) {
     char topic[50];
+  
     snprintf(topic, sizeof(topic), "commands/%s", node_id); // e.g., "commands/node123"
 
     json_t *root = json_object();
@@ -132,19 +150,31 @@ int main() {
     mosquitto_subscribe(mosq, NULL, "status/#", 0);       // Subscribe to all status messages
     mosquitto_message_callback_set(mosq, on_message);      // Set the message callback function
 
-    printf("starting the loop");
-    while (1) {
-        mosquitto_loop(mosq, 100, -1); // Process MQTT events
-
-        // Example: Send a command to a node (replace with your logic)
-        // (You'll need to get the node ID somehow, e.g., from user input or from the discovered nodes list)
-        // char target_node_id[20] = "node123"; // Replace with the actual node ID
-        // send_command(mosq, target_node_id, "get_temperature");
-
-        sleep(5); // Example: Do other things in the gateway loop
+    // Start the network loop in a separate thread (recommended)
+    //  handle incoming MQTT messages only. don't use for sending
+    rc = mosquitto_loop_start(mosq);  // Non-blocking
+    if(rc != MOSQ_ERR_SUCCESS){
+        fprintf(stderr, "Error: Loop start failed: %s\n", mosquitto_strerror(rc));
+        mosquitto_destroy(mosq);
+        mosquitto_lib_cleanup();
+        return 1;
     }
 
+    while (1) {}
+
+    // while (1) {
+    //     mosquitto_loop(mosq, 100, -1); // Process MQTT events
+
+    //     //Example: Send a command to a node (replace with your logic)
+    //     // (You'll need to get the node ID somehow, e.g., from user input or from the discovered nodes list)
+    //     char target_node_id[20] = "node11111111"; // Replace with the actual node ID
+    //     send_command(mosq, target_node_id, "get_temperature");
+
+    //     sleep(5); // Example: Do other things in the gateway loop
+    // }
+
     // ... (Mosquitto cleanup and free the linked list of nodes - same as before)
+    mosquitto_loop_stop(mosq, false); // Stop the loop when done
     mosquitto_disconnect(mosq); // Disconnect from the broker
     mosquitto_destroy(mosq); // Destroy the Mosquitto client instance
     mosquitto_lib_cleanup(); // Clean up Mosquitto    

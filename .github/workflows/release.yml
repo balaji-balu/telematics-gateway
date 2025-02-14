@@ -1,0 +1,23 @@
+name: Create and Upload Release Archive
+
+on:
+  push:
+    tags:
+      - "v*.*.*"  # Runs only for version tags like v1.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create Tar.xz Archive
+        run: tar -cJf telematics-gateway-${{ github.ref_name }}.tar.xz .
+
+      - name: Upload Archive to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: telematics-gateway-${{ github.ref_name }}.tar.xz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

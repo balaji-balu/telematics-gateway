@@ -3,11 +3,11 @@ RUN apk add --no-cache gcc musl-dev mosquitto-dev jansson-dev pkgconfig
 WORKDIR /app
 COPY gateway.c .
 # RUN gcc -o gateway gateway.c
-RUN gcc -o gateway gateway.c $(pkg-config --cflags --libs jansson libmosquitto)
+RUN gcc -o gateway1 gateway.c $(pkg-config --cflags --libs jansson libmosquitto)
 
 FROM alpine:latest
 # Install only the runtime dependencies
 RUN apk add --no-cache mosquitto jansson
 WORKDIR /app
-COPY --from=build /app/gateway .
-CMD ["./gateway"]
+COPY --from=build /app/gateway1 .
+CMD ["./gateway1"]

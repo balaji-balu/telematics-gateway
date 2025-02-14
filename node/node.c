@@ -120,19 +120,19 @@ int main() {
     publish_discovery_message(mosq, node_id);
 
     sleep(5);
-/* 
+ 
     while (1) {
 
-        char status_topic[50];
-        snprintf(status_topic, sizeof(status_topic), "status/%s", "node3715");
-        char status_message[50];
-        snprintf(status_message, sizeof(status_message), "{\"Uptime\": 127}" ); // Example
-        const char *payload = "Hello, 🌍";
-        //rc = mosquitto_publish(mosq, NULL, status_topic, strlen(status_message), status_message, 0, false);
-        rc = mosquitto_publish(mosq, NULL, status_topic, strlen(payload), payload, 0, false);
-        if (rc != MOSQ_ERR_SUCCESS) {
-            fprintf(stderr, "Status publish error: %s\n", mosquitto_strerror(rc));
-        }
+        // char status_topic[50];
+        // snprintf(status_topic, sizeof(status_topic), "status/%s", "node3715");
+        // char status_message[50];
+        // snprintf(status_message, sizeof(status_message), "{\"Uptime\": 127}" ); // Example
+        // const char *payload = "Hello, 🌍";
+        // //rc = mosquitto_publish(mosq, NULL, status_topic, strlen(status_message), status_message, 0, false);
+        // rc = mosquitto_publish(mosq, NULL, status_topic, strlen(payload), payload, 0, false);
+        // if (rc != MOSQ_ERR_SUCCESS) {
+        //     fprintf(stderr, "Status publish error: %s\n", mosquitto_strerror(rc));
+        // }
 
        
 
@@ -179,12 +179,13 @@ int main() {
             fprintf(stderr, "Status publish error: %s\n", mosquitto_strerror(rc));
         }
 
+        publish_discovery_message(mosq, node_id);
+        
         // 5. Check for commands from the gateway
         mosquitto_loop(mosq, 100, -1); // Process incoming messages
 
         sleep(5); // Wait before the next reading
     }
-*/
     // ... (Mosquitto cleanup)
     mosquitto_disconnect(mosq); // Disconnect from the broker
     mosquitto_destroy(mosq); // Destroy the Mosquitto client instance

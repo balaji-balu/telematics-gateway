@@ -18,20 +18,20 @@ services:
   gateway:
     build:
       context: ./gateway
-      dockerfile: Dockerfile.gateway
+      dockerfile: Dockerfile.wrt
     depends_on:
       - mosquitto
     networks:
       - mqtt_network
 
-  # node1:
-  #   build:
-  #     context: ./node
-  #     dockerfile: Dockerfile.node
-  #   depends_on:
-  #     - mosquitto
-  #   networks:
-  #     - mqtt_network
+  node1:
+    build:
+      context: ./node
+      dockerfile: Dockerfile.node
+    depends_on:
+      - mosquitto
+    networks:
+      - mqtt_network
 
   # node2:
   #   build:

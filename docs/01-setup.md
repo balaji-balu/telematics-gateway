@@ -20,14 +20,15 @@ The recommended way to integrate your telematics software into OpenWrt is by cre
 **Package Directory**: Create a directory in the package or feeds directory of your OpenWrt build system. Let's say your package is called telematics-gateway. The structure would look like this:
 ```
 openwrt/
-  feeds/
-    telematics/  <-- Your custom feed (recommended)
-      telematics-gateway/
-        Makefile
-        src/
-          telematics_gateway.c  <-- Your main application code
-          ... other source files
-        files/  <-- Configuration files, scripts, etc.
+  package/
+    feeds/
+      telematics/  <-- Your custom feed (recommended)
+        telematics-gateway/
+          Makefile
+          src/
+            telematics_gateway.c  <-- Your main application code
+            ... other source files
+          files/  <-- Configuration files, scripts, etc.
 ```
 **Makefile**: This is the heart of your package. Here's a basic example:
 ```Makefile
@@ -94,9 +95,61 @@ make -j$(nproc)
 Flashing the Image: The output of the build process will be an image file (e.g., .img, .bin). You'll need to flash this image onto your target device. The exact method depends on your device (e.g., using mtd, TFTP, or a web interface). Consult your device's documentation.
 Installing the Package (Alternative): If you don't want to rebuild the entire image, you can build just the package:
 ```Bash
+make package/telematics-gateway/{clean,prepare} V=s
 make package/telematics-gateway/compile
 ```
 This will create an .ipk file in bin/packages. You can then copy this file to your target device and install it using `opkg install telematics-gateway_*.ipk`.
+
+Automation script
+```
+#!/bin/bash
+
+# Define package name
+PKG_NAME="telematics-gateway"
+
+# Change to OpenWRT build directory
+OPENWRT_DIR="~/openwrt-project/openwrt-23-05-2/"
+BUILD_DIR="$OPENWRT_DIR/build_dir"
+
+cd OPENWRT_DIR
+echo OPENWRT_DIR
+echo "🛠 Building package: $PKG_NAME"
+
+# Clean previous builds
+echo "🧹 Cleaning previous build..."
+make package/$PKG_NAME/clean
+
+# Run the prepare step
+echo "📦 Running Build/Prepare..."
+make package/$PKG_NAME/prepare V=s
+
+# Check if the source files were copied
+PKG_BUILD_DIR=$(find "$BUILD_DIR" -type d -name "$PKG_NAME" | head -n 1)
+
+if [ -d "$PKG_BUILD_DIR" ]; then
+    echo "✅ Package prepared successfully in: $PKG_BUILD_DIR"
+    ls -l "$PKG_BUILD_DIR"
+else
+    echo "❌ Error: Package preparation failed. Check the Makefile."
+    exit 1
+fi
+
+# Run the compile step
+echo "⚙️  Running Build/Compile..."
+make package/$PKG_NAME/compile V=s
+
+# Check if the package binary was created
+BIN_DIR="$OPENWRT_DIR/bin/packages/"
+BIN_FILE=$(find "$BIN_DIR" -type f -name "$PKG_NAME*" | head -n 1)
+
+if [ -n "$BIN_FILE" ]; then
+    echo "✅ Package compiled successfully: $BIN_FILE"
+else
+    echo "❌ Error: Compilation failed. Check logs for errors."
+    exit 1
+fi
+
+```
 
 ### 5. Testing and Debugging:
 

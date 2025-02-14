@@ -1,6 +1,0 @@
-FROM openwrtorg/rootfs:x86-64
-WORKDIR /app
-COPY gateway.c .
-RUN opkg update && opkg install gcc make
-RUN gcc -o gateway gateway.c
-CMD ["./gateway"]

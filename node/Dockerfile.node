@@ -1,9 +1,9 @@
 FROM alpine:latest AS build
-RUN apk add --no-cache gcc musl-dev mosquitto-dev jansson-dev util-linux-dev pkgconfig
+RUN apk add --no-cache gcc musl-dev mosquitto-dev jansson-dev pkgconfig
 WORKDIR /app
 COPY node.c .
 # RUN gcc -o gateway gateway.c
-RUN gcc -o node node.c $(pkg-config --cflags --libs jansson libmosquitto) -luuid
+RUN gcc -o node node.c $(pkg-config --cflags --libs jansson libmosquitto) 
 
 FROM alpine:latest
 # Install only the runtime dependencies
