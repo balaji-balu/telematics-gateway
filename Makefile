@@ -1,38 +1,28 @@
-include $(TOPDIR)/rules.mk
+# Compiler and flags
+CC ?= gcc
+CFLAGS += -Wall -Wextra -I.
+LDFLAGS += -lmosquitto -lcoap
 
-PKG_NAME:=telematics-gateway
-PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
+# Binary name
+TARGET = telematics-gateway
 
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/balaji-balu/telematics-gateway.git
-PKG_SOURCE_VERSION:=main
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+# Source files
+SRCS = $(wildcard *.c)
+OBJS = $(SRCS:.c=.o)
 
-include $(INCLUDE_DIR)/package.mk
+# Default target
+all: $(TARGET)
 
-define Package/telematics-gateway
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE:=Telematics Gateway
-  DEPENDS:=+libmosquitto +libcoap
-endef
+# Linking the final binary
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-define Package/telematics-gateway/description
-  A telematics gateway application supporting MQTT and CoAP for OpenWRT.
-endef
+# Compiling source files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-define Build/Prepare
-	$(call Build/Prepare/Default)
-endef
+# Clean build files
+clean:
+	rm -f $(TARGET) $(OBJS)
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
-endef
-
-define Package/telematics-gateway/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/telematics-gateway $(1)/usr/bin/
-endef
-
-$(eval $(call BuildPackage,telematics-gateway))
+.PHONY: all clean
