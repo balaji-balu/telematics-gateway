@@ -23,8 +23,7 @@ define Package/telematics-gateway/description
 endef
 
 define Build/Prepare
-	$(MKDIR) $(PKG_BUILD_DIR)
-	$(CP) ./gateway/* $(PKG_BUILD_DIR)/
+	$(call Build/Prepare/Default)
 endef
 
 define Build/Compile

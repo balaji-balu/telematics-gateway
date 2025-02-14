@@ -1,19 +1,28 @@
-CC := $(TARGET_CC)
-CFLAGS := $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include
-LDFLAGS := $(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib -lmosquitto -lcoap
+# Compiler and flags
+CC ?= gcc
+CFLAGS += -Wall -Wextra -I.
+LDFLAGS += -lmosquitto -ljansson
 
-SRC := gateway.c
-OBJ := $(SRC:.c=.o)
+# Binary name
+TARGET = telematics-gateway
 
-TARGET := telematics-gateway
+# Source files
+SRCS = $(wildcard *.c)
+OBJS = $(SRCS:.c=.o)
 
+# Default target
 all: $(TARGET)
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LDFLAGS)
+# Linking the final binary
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
+# Compiling source files
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# Clean build files
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(TARGET) $(OBJS)
+
+.PHONY: all clean

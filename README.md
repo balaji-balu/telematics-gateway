@@ -17,7 +17,20 @@ run broker
 mosquitto_sub -h localhost -p 1883 -t "#" -v
 ```
 
+git add .
+git commit -m ""
+git tag v1.0.0
+git push origin v1.0.0
+
 After testing: 
 create directory and makefile under the directory, 
 package/feeds/telematics/telematics-gateway
 - Makefile
+
+make package/telematics-gateway/prepare V=s
+make package/telematics-gateway/compile V=s
+
+
+
+	$(MKDIR) $(PKG_BUILD_DIR)
+	$(CP) ./gateway/* $(PKG_BUILD_DIR)/
