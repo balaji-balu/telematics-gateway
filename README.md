@@ -1,4 +1,4 @@
-![](/docs/telematics-gatway-docker.jpg)
+![](/docs/telematics-gatway-docker-cropped.jpg)
 
 docker compose is used to bundle mosquitto broker, gateway and nodes
 documentation available in docs folder
