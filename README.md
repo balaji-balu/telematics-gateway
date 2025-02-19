@@ -1,11 +1,10 @@
-![](/docs/telematics-gatway-docker-cropped.jpg)
-
+## Test without openwrt 
 docker compose is used to bundle mosquitto broker, gateway and nodes
+
 documentation available in docs folder
 
-go to the root directory
+In the root directory
 
-run this command
 ```
 docker compose up --build -d
 ```
@@ -19,20 +18,34 @@ run broker
 mosquitto_sub -h localhost -p 1883 -t "#" -v
 ```
 
+```
 git add .
 git commit -m ""
 git tag v1.0.0
 git push origin v1.0.0
+```
+## Test with openwrt
 
-After testing: 
-create directory and makefile under the directory, 
-package/feeds/telematics/telematics-gateway
-- Makefile
+Get started with OpenWrt [Hello world](https://openwrt.org/docs/guide-developer/helloworld/start). This article series walks you through the basics of developing new software for your router.
 
-make package/telematics-gateway/prepare V=s
-make package/telematics-gateway/compile V=s
+<img src="/docs/telematics-gatway-docker-cropped.jpg" alt="drawing" width="500"/>
 
+Create openwrt docker image with helloworld package and run the docker container
+```dockerfile
+FROM scratch
+ADD bin/targets/x86/64/openwrt-*.tar.gz /
+COPY bin/packages/x86_64/mypackages/helloworld_1.0-1_x86_64.ipk /tmp
+CMD ["/bin/sh"]
+```
+```sh
+docker build -t openwrt-x86 -f Dockerfile.x86.yml
+docker run -it openwrt-x86 sh
+```
+```sh
+# / mkdir -p lock
+# / opkg update
+# / opkg install /tmp/helloworld_1.0-1_x86_64.ipk
+# / ./helloworld
+Hello, World
+```
 
-
-	$(MKDIR) $(PKG_BUILD_DIR)
-	$(CP) ./gateway/* $(PKG_BUILD_DIR)/
