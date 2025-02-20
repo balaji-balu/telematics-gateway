@@ -48,4 +48,13 @@ docker run -it openwrt-x86 sh
 # / ./helloworld
 Hello, World
 ```
+package source: `/home/balaji/oprnwrt-helloworld`
+
+package manifest: `/home/balaji/mypackages/examples/helloworld`
+
+package feed at openwrt source: `/home/balaji/openwrt-project/openwrt-23.05.0/feeds.conf`
+
+```src-link mypackages /home/balaji/mypackages```
+
+
 
