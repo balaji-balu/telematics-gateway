@@ -56,6 +56,15 @@ package feed at openwrt source: `/home/balaji/openwrt-project/openwrt-23.05.0/fe
 
 ```src-link mypackages /home/balaji/mypackages```
 
+Install package feed
+```
+cd ~/openwrt-project/openwrt-23-05-2
+./scripts/feeds update mypackages
+./scripts/feeds install -a -p mypackages
+```
+
 Compile package
+```
 balaji@balaji:~/openwrt-project/openwrt-23-05-2$ make package/helloworld/compile V=sc
+```
 
