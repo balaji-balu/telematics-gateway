@@ -38,7 +38,7 @@ COPY bin/packages/x86_64/mypackages/helloworld_1.0-1_x86_64.ipk /tmp
 CMD ["/bin/sh"]
 ```
 ```sh
-docker build -t openwrt-x86 -f Dockerfile.x86.yml
+docker build -t openwrt-x86 -f dockerfile-x86.yml .
 docker run -it openwrt-x86 sh
 ```
 ```sh
