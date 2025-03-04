@@ -158,17 +158,6 @@ int main() {
 
     while (1) {}
 
-    // while (1) {
-    //     mosquitto_loop(mosq, 100, -1); // Process MQTT events
-
-    //     //Example: Send a command to a node (replace with your logic)
-    //     // (You'll need to get the node ID somehow, e.g., from user input or from the discovered nodes list)
-    //     char target_node_id[20] = "node11111111"; // Replace with the actual node ID
-    //     send_command(mosq, target_node_id, "get_temperature");
-
-    //     sleep(5); // Example: Do other things in the gateway loop
-    // }
-
     mosquitto_loop_stop(mosq, false); // Stop the loop when done
     mosquitto_disconnect(mosq); // Disconnect from the broker
     mosquitto_destroy(mosq); // Destroy the Mosquitto client instance
