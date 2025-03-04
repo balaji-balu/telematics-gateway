@@ -8,7 +8,6 @@
 #include <locale.h>
 //#include <uuid/uuid.h>
 
-// ... (Mosquitto initialization and connection - same as before)
 #define MQTT_BROKER "mosquitto" // Replace with your broker's address
 #define MQTT_PORT 1883 // Default MQTT port
 #define MQTT_TOPIC "telematics/data" // Your MQTT topic
