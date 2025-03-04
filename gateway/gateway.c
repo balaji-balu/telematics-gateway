@@ -42,8 +42,6 @@ void process_discovery_message(const char *message) {
         return;
     }
 
-    printf("1\n");
-
     char sensor_list[50] = {0};
     size_t sensor_count = json_array_size(sensors);
     for (size_t i = 0; i < sensor_count; i++) {
@@ -53,8 +51,6 @@ void process_discovery_message(const char *message) {
             if (i < sensor_count - 1) strcat(sensor_list, ", ");
         }
     }
-
-    printf("2\n");
 
     // Check if the node is already in the list
     struct node_info *current = head;
@@ -69,7 +65,6 @@ void process_discovery_message(const char *message) {
         current = current->next;
     }
 
-    printf("3\n");
     // Node is new, add it to the list
     struct node_info *new_node = (struct node_info *)malloc(sizeof(struct node_info));
     strcpy(new_node->node_id, json_string_value(node_id));
