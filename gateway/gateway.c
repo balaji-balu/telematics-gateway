@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <unistd.h> // For sleep()
 
-// ... (Mosquitto initialization and connection - same as before)
 #define MQTT_BROKER "mosquitto" // Replace with your broker's address
 #define MQTT_PORT 1883 // Default MQTT port
 #define MQTT_TOPIC "telematics/data" // Your MQTT topic
@@ -23,8 +22,6 @@ struct node_info *head = NULL; // Head of the linked list of nodes
 
 // Function to process discovery messages
 void process_discovery_message(const char *message) {
-    // ... (JSON parsing - same as before)
-    // ... (Check if node exists, add or update - same as before)
     json_t *root, *node_id, *sensors;
     json_error_t error;
 
@@ -125,7 +122,6 @@ void send_command(struct mosquitto *mosq, const char *node_id, const char *comma
 
 
 int main() {
-    // ... (Mosquitto initialization and connection - same as before)
     int rc;
     struct mosquitto *mosq = NULL;
 
@@ -173,7 +169,6 @@ int main() {
     //     sleep(5); // Example: Do other things in the gateway loop
     // }
 
-    // ... (Mosquitto cleanup and free the linked list of nodes - same as before)
     mosquitto_loop_stop(mosq, false); // Stop the loop when done
     mosquitto_disconnect(mosq); // Disconnect from the broker
     mosquitto_destroy(mosq); // Destroy the Mosquitto client instance
